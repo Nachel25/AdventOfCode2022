@@ -2,61 +2,53 @@
 {
     public class Day1
     {
-        private readonly string[] lines;
-        private readonly int numberOfElves;
-        private readonly int[] elfCalories;
+        private readonly string[] _linesArray;
+        private readonly int[] _elfCaloriesArray;
 
+        private int _totalCaloriesTopOne;
         public int TotalCaloriesTopOne
         {
             get
             {
-                var elfWithMostCalories = (from elves in elfCalories
-                                           orderby elves descending
-                                           select elves).First();
-                var totalCaloriesTopOne = elfWithMostCalories;
-                return totalCaloriesTopOne;
+                _totalCaloriesTopOne = (from elves in _elfCaloriesArray
+                                        orderby elves descending
+                                        select elves).First();
+                return _totalCaloriesTopOne;
             }
         }
 
+        private int _totalCaloriesTopThree;
         public int TotalCaloriesTopThree
         {
             get
             {
-                var elfWithMostCalories = (from elves in elfCalories
-                                       orderby elves descending
-                                       select elves).First();
-
-                var elfWithSecondMostCalories = (from elves in elfCalories
-                                             orderby elves descending
-                                             select elves).Skip(1).First();
-
-                var elfWithThirdMostCalories = (from elves in elfCalories
-                                            orderby elves descending
-                                            select elves).Skip(2).First();
-
-                var totalCaloriesTopThree = elfWithMostCalories + elfWithSecondMostCalories + elfWithThirdMostCalories;
-                return totalCaloriesTopThree;
+                _totalCaloriesTopThree = (from elves in _elfCaloriesArray
+                                         orderby elves descending
+                                         select elves).Take(3).Sum();
+                return _totalCaloriesTopThree;
             }
         }
 
         public Day1(string filepath)
         {
-            lines = File.ReadAllLines(filepath);
-            foreach (var line in lines)
+            _linesArray = File.ReadAllLines(filepath);
+
+            var numberOfElves = 0;
+            foreach (var line in _linesArray)
             {
                 if (string.IsNullOrEmpty(line))
                 {
                     numberOfElves++;
                 }
             }
-            elfCalories = new int[numberOfElves + 1];
+            _elfCaloriesArray = new int[numberOfElves + 1];
 
             var elfIndex = 0;
-            foreach (var line in lines)
+            foreach (var line in _linesArray)
             {
                 if (!string.IsNullOrEmpty(line))
                 {
-                    elfCalories[elfIndex] += int.Parse(line);
+                    _elfCaloriesArray[elfIndex] += int.Parse(line);
                 }
                 else
                 {
